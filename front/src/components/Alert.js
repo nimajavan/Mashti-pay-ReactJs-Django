@@ -2,10 +2,13 @@ import React from "react";
 import Swal from "sweetalert2";
 
 const showMassage = (mes, info) => {
-  if (info == "error") {
-    Swal.fire(mes, "دوباره تلاش کنید", info);
-  } else {
-    Swal.fire(mes, "به سبد خرید مراجعه کنید", info);
+  switch (info) {
+    case "error":
+      Swal.fire(mes, "دوباره تلاش کنید", info);
+    case "success":
+      Swal.fire(mes, "به سبد خرید مراجعه کنید", info);
+    case "profile_update":
+      Swal.fire(mes, "از درستی اطلاعات مطمئن شوید", "success");
   }
 };
 function Alert(probs) {

@@ -40,6 +40,7 @@ class ProfileGetSerializer(serializers.ModelSerializer):
             'avatar',
             'selfi_image',
             'vip_user',
+            'email',
             'selfi_image_status'
         ]
 
@@ -53,5 +54,6 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             'bank_card_num',
             'bank_shaba_num',
             'avatar',
+            'email',
             'selfi_image',
         ]

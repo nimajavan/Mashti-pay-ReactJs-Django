@@ -16,7 +16,15 @@ class Cart:
         if order_id not in self.cart:
             dollar = int(DollarPrice.objects.get(id=1).price)
             total = dollar * int(quantity)
-            self.cart[order_id] = {'quantity': quantity, 'price': total}
+            self.cart[order_id] = {'quantity': quantity, 'price': total, 'order_id': order_id}
+        self.save()
+
+    def remove(self, order_id):
+        del self.cart[str(order_id)]
+        self.save()
+
+    def remove_all(self):
+        self.session[CART_SESSION_ID] = {}
         self.save()
 
     def __iter__(self):

@@ -45,6 +45,31 @@ export const GetCartAction = () => async (dispatch, getState) => {
   }
 };
 
+export const RemoveCartAction = (id) => async (dispatch, getState) => {
+  axios.defaults.withCredentials = true;
+  try {
+    dispatch({ type: CART_ORDER_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      header: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post(
+      "http://127.0.0.1:8000/api/v1/remove_cart/",
+      { id: id },
+      config
+    );
+    localStorage.setItem("cart", JSON.stringify(data));
+    dispatch({ type: CART_ORDER_SUCCESS, payload: data });
+  } catch (cart_error) {
+    dispatch({ type: CART_ORDER_FIALD, payload: cart_error.response.data });
+  }
+};
+
 export const GetDollarPriceAction = () => async (dispatch) => {
   try {
     dispatch({ type: DOLLAR_PRICE_REQUEST });

@@ -10,8 +10,10 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAILD,
   USER_LOGIN_SUCCESS,
+  USER_UPDATE_SUCCESS_FINISH,
 } from "../constants/UserLoginConstants";
 import axiosInstance from "../utils/axiosInstance";
+import { json } from "react-router";
 
 export const FetchUserProfileAction = () => async (dispatch, getState) => {
   try {
@@ -24,6 +26,7 @@ export const FetchUserProfileAction = () => async (dispatch, getState) => {
       "http://127.0.0.1:8000/api/v1/profile/"
     );
     dispatch({ type: USER_PROFILE_SUCCESS, payload: data });
+    localStorage.setItem("profile_status", JSON.stringify(data));
   } catch (profile_error) {
     dispatch({
       type: USER_PROFILE_FAILD,
@@ -51,7 +54,9 @@ export const UpdateProfileAction =
           bank_shaba_num: bank_shaba_num,
         }
       );
+      localStorage.removeItem("profile_status");
       dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+      localStorage.setItem("profile_status", JSON.stringify(data));
     } catch (update_failed) {
       dispatch({
         type: USER_UPDATE_FAILD,

@@ -9,16 +9,31 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAILD,
+  USER_UPDATE_SUCCESS_FINISH,
 } from "../constants/UserLoginConstants";
 
 export const UpdateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_UPDATE_REQUEST:
-      return { ...state, updating: true };
+      return { updating: true, success_update: false };
     case USER_UPDATE_SUCCESS:
-      return { updating: false, update_profile_status: action.payload };
+      return {
+        updating: false,
+        success_update: true,
+        update_profile_status: action.payload,
+      };
+    case USER_UPDATE_SUCCESS_FINISH:
+      return {
+        updating: false,
+        success_update: false,
+        update_profile_status: action.payload,
+      };
     case USER_UPDATE_FAILD:
-      return { updating: false, update_failed: action.payload };
+      return {
+        updating: false,
+        success_update: false,
+        update_failed: action.payload,
+      };
     default:
       return state;
   }

@@ -23,6 +23,7 @@ import {
   GetOrdersAction,
   GetSellOrdersAction,
   GetCartAction,
+  RemoveCartAction,
 } from "../actions/UserFormAction";
 import ExchnageTable from "../components/ExchnageTable";
 import HistoryTable from "../components/HistoryTable";
@@ -30,6 +31,7 @@ import SellHistoryTable from "../components/SellHistoryTable";
 import { LinkContainer } from "react-router-bootstrap";
 import Cart from "../components/Cart";
 import Alert from "../components/Alert";
+import { USER_UPDATE_SUCCESS_FINISH } from "../constants/UserLoginConstants";
 
 function DashboardScreen() {
   window.onload = function () {
@@ -85,6 +87,9 @@ function DashboardScreen() {
   const orders = useSelector((state) => state.getOrder);
   const sell_orders_history = useSelector((state) => state.getSellOrder);
   const cartState = useSelector((state) => state.getCart);
+  const profileUpdate = useSelector((state) => state.userProfileUpdate);
+  const { updating, update_profile_status, update_failed } = profileUpdate;
+  var success_update = profileUpdate.success_update;
   const { buy_order_loading, buy_order_state, buy_order_error } = buy;
   const { get_cart_loading, cart, cart_error } = cartState;
   const { sell_orders_loading, sell_items, sell_itmes_error } =
@@ -166,8 +171,11 @@ function DashboardScreen() {
     dispatch(UserLogoutAction());
   }
 
+  const remove_cart_func = (id) => {
+    dispatch(RemoveCartAction(id));
+  };
+
   useEffect(() => {
-    console.log(1);
     if (
       !userInfo ||
       profile_error != null ||
@@ -175,8 +183,9 @@ function DashboardScreen() {
     ) {
       navigate("/login");
     } else {
-      if (profile_status == null) {
+      if (profile_status == null || success_update == true) {
         dispatch(FetchUserProfileAction(userInfo.token));
+        dispatch({ type: USER_UPDATE_SUCCESS_FINISH });
       } else if (price == null) {
         dispatch(GetOrdersAction());
         dispatch(GetSellOrdersAction());
@@ -194,12 +203,14 @@ function DashboardScreen() {
         setOrder(items);
         setSellOrder(sell_items);
         setCartItem(cart);
+        setEmail(profile_status.email);
       }
     }
   }, [
+    success_update,
     userInfo,
-    dispatch,
     profile_status,
+    dispatch,
     price,
     items,
     sell_items,
@@ -268,6 +279,12 @@ function DashboardScreen() {
             </Row>
             <div id="inform_form" className="d-block" style={{ marginTop: 50 }}>
               <Container>
+                {success_update ? (
+                  <Alert
+                    message={"آپدیت پروفایل با موفقیت انجام شد"}
+                    info="profile_update"
+                  />
+                ) : null}
                 <Form onSubmit={UpdateProfileHandler}>
                   <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridEmail">
@@ -499,6 +516,7 @@ function DashboardScreen() {
                             <Cart
                               passChildData={setShowCartModal}
                               items={cartItem}
+                              remove_cart_func={remove_cart_func}
                             />
                           )}
                         </Form>

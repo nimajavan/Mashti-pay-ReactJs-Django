@@ -5,6 +5,7 @@ import { UserLoginReducer } from "./reducers/UserLoginReducer";
 import {
   FetchProfileReducer,
   SelfiUploadReducder,
+  UpdateProfileReducer,
 } from "./reducers/UserProfileReducer";
 import {
   SendSmsReducer,
@@ -24,6 +25,7 @@ const reducer_root = combineReducers({
   sendSms: SendSmsReducer,
   userRegister: UserRegisterReducer,
   userProfile: FetchProfileReducer,
+  userProfileUpdate: UpdateProfileReducer,
   selfiUpload: SelfiUploadReducder,
   dollarPrice: GetDollarPriceReducer,
   buyOrder: BuyOrderReducer,

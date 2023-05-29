@@ -8,5 +8,7 @@ urlpatterns = [
     path('sell_order/', views.SellOrderView.as_view()),
     path('create_payment/', views.create_payment_url),
     path('callback_payment/', views.payment_return),
-    path('show_cart/', views.show_cart)
+    path('show_cart/', views.show_cart),
+    path('remove_cart/', views.remove_cart),
+    path('remove_all_cart/', views.remove_all_cart)
 ]

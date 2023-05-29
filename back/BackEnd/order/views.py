@@ -20,6 +20,25 @@ def show_cart(request):
     return Response(cart_obj)
 
 
+@permission_classes([IsAuthenticated])
+@api_view(http_method_names=['POST'])
+def remove_cart(request):
+    data = request.data
+    cart = Cart(request)
+    cart.remove(data['id'])
+    cart_obj = request.session.get("cart")
+    return Response(cart_obj)
+
+
+@permission_classes([IsAuthenticated])
+@api_view(http_method_names=['GET'])
+def remove_all_cart(request):
+    cart = Cart(request)
+    cart.remove_all()
+    cart_obj = request.session.get("cart")
+    return Response(cart_obj)
+
+
 class BuyOrderView(APIView):
     allowed_methods = ['POST', 'GET']
     permission_classes = [IsAuthenticated]

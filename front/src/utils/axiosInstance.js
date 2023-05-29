@@ -18,14 +18,20 @@ const axiosInstance = (userInfo, dispatch) => {
     const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 5000;
 
     if (!isExpired) return req;
-
-    const response = await axios.post("http://127.0.0.1:8000/token/refresh/", {
-      refresh: userInfo.refresh,
-    });
-
-    dispatch(updateAccessToken(response.data));
-    req.headers.Authorization = `Bearer ${response.data.access}`;
-    return req;
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/token/refresh/",
+        {
+          refresh: userInfo.refresh,
+        }
+      );
+      dispatch(updateAccessToken(response.data));
+      req.headers.Authorization = `Bearer ${response.data.access}`;
+      return req;
+    } catch {
+      localStorage.removeItem("profile_status");
+      localStorage.removeItem("userInfo");
+    }
   });
   return instance;
 };
