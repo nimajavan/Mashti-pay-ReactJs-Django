@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 function HomeScreen() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo, error } = userLogin;
-  console.log(error);
+
   useEffect(() => {});
   return (
     <section id="homescreen">

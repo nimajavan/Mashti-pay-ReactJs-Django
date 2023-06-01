@@ -602,6 +602,15 @@ function DashboardScreen() {
           </Card.Body>
         </Card>
       </Container>
+      <Container fluid className="mt-2">
+        <Card>
+          <Card.Body>
+            <Container>
+              <TicketTable />
+            </Container>
+          </Card.Body>
+        </Card>
+      </Container>
     </section>
   );
 }

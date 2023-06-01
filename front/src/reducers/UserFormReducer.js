@@ -17,6 +17,9 @@ import {
   CART_ORDER_REQUEST,
   CART_ORDER_SUCCESS,
   CART_ORDER_FIALD,
+  TICKET_REQUEST,
+  TICKET_SUCCESS,
+  TICKET_FIALD,
 } from "../constants/UserFormConstants";
 
 export const GetDollarPriceReducer = (state = {}, action) => {
@@ -92,6 +95,19 @@ export const GetCartReducer = (state = {}, action) => {
       return { get_cart_loading: false, cart: action.payload };
     case CART_ORDER_FIALD:
       return { get_cart_loading: false, cart_error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const GetTicketReducer = (state = {}, action) => {
+  switch (action.type) {
+    case TICKET_REQUEST:
+      return { ...state, ticket_loading: true };
+    case TICKET_SUCCESS:
+      return { ticket_loading: false, tickets: action.payload };
+    case TICKET_FIALD:
+      return { ticket_loading: false, ticket_error: action.paylaod };
     default:
       return state;
   }

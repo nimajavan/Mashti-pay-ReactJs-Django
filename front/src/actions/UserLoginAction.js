@@ -26,10 +26,7 @@ export const UserLoginAction = (phone, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAILD,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: error.code,
     });
   }
 };

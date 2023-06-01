@@ -10,9 +10,11 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
+import Alert from "../components/Alert";
 import { UserLoginAction, UserLogoutAction } from "../actions/UserLoginAction";
 import { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
+
 function LoginScreen() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,15 +30,17 @@ function LoginScreen() {
     e.preventDefault();
     dispatch(UserLoginAction(phone, password));
   };
-
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
   }, [navigate, redirect, userInfo]);
-
   return (
     <Container fluid>
+      {error ? <Alert message={"خطا"} info={"login_error"} /> : null}
+      {userInfo ? (
+        <Alert message={"شما با موفقیت وارد شدید"} info={"login_success"} />
+      ) : null}
       <Row className="d-flex justify-content-center align-items-center h-100">
         <Col md={12}>
           <Card

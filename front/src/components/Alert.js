@@ -9,6 +9,10 @@ const showMassage = (mes, info) => {
       Swal.fire(mes, "به سبد خرید مراجعه کنید", info);
     case "profile_update":
       Swal.fire(mes, "از درستی اطلاعات مطمئن شوید", "success");
+    case "login_error":
+      Swal.fire(mes, "", "error");
+    case "login_success":
+      Swal.fire(mes, "", "success");
   }
 };
 function Alert(probs) {

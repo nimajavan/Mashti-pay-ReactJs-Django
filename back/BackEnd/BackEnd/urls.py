@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('account.urls', namespace='account')),
     path('api/v1/', include('order.urls', namespace='order')),
+    path('api/v1/', include('ticket.urls', namespace='ticket')),
     path('token/refresh/', TokenRefreshView.as_view(), name='refresh_token')
 ]
 

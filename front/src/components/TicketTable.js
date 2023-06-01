@@ -1,45 +1,42 @@
-import {React, useState, useEffect} from 'react'
-import DataTable from 'react-data-table-component';
-import {useDispatch, useSelector} from 'react-redux';
-
-
-
+import { React, useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
+import { useDispatch, useSelector } from "react-redux";
 
 function TicketTable() {
-    const columns = [
+  const columns = [
     {
-        name: 'Title',
-        selector: row => row.title,
-        sortable: true,
+      name: "موضوع",
+      selector: (row) => row.title,
+      sortable: true,
     },
     {
-        name: 'Director',
-        selector: row => row.director,
-        sortable: true,
+      name: "متن",
+      selector: (row) => row.body,
+      sortable: true,
     },
     {
-        name: 'Year',
-        selector: row => row.year,
-        sortable: true,
+      name: "وضعیت",
+      selector: (row) => row.status,
+      sortable: true,
     },
-];
+    {
+      name: "تاریخ",
+      selector: (row) => row.date,
+      sortable: true,
+    },
+  ];
 
-    const data = [
-        {
-            id: 1,
-            title: 'Beetlejuice',
-            year: '1988',
-        },
-        {
-            id: 2,
-            title: 'Ghostbusters',
-            year: '1984',
-        },
-    ]
-    
-  return (
-    <DataTable title="تیکت ها" columns={columns} data={data} pagination />
-  );
+  const data = [
+    {
+      id: 1,
+      title: "Beetlejuice",
+      body: "1988",
+      status: "1988",
+      date: "1988",
+    },
+  ];
+
+  return <DataTable title="تیکت ها" columns={columns} data={data} pagination />;
 }
 
-export default TicketTable
+export default TicketTable;

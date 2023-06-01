@@ -17,9 +17,13 @@ import {
   CART_ORDER_REQUEST,
   CART_ORDER_SUCCESS,
   CART_ORDER_FIALD,
+  TICKET_REQUEST,
+  TICKET_SUCCESS,
+  TICKET_FIALD,
 } from "../constants/UserFormConstants";
 import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
+import { error } from "jquery";
 
 export const GetCartAction = () => async (dispatch, getState) => {
   axios.defaults.withCredentials = true;
@@ -214,3 +218,20 @@ export const GetSellOrdersAction =
       }
     }
   };
+
+export const GetTicketAction = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: TICKET_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const authRequestAxios = axiosInstance(userInfo, dispatch);
+    const { data } = authRequestAxios.get("http://127.0.0.1:8000/api/v1/");
+    dispatch({ type: TICKET_SUCCESS, payload: data });
+  } catch (ticket_error) {
+    dispatch({
+      type: TICKET_FIALD,
+      payload: ticket_error.response.data,
+    });
+  }
+};
