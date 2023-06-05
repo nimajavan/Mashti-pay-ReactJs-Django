@@ -226,7 +226,10 @@ export const GetTicketAction = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
     const authRequestAxios = axiosInstance(userInfo, dispatch);
-    const { data } = authRequestAxios.get("http://127.0.0.1:8000/api/v1/");
+    const { data } = await authRequestAxios.get(
+      "http://127.0.0.1:8000/api/v1/get_ticket/"
+    );
+    console.log(data);
     dispatch({ type: TICKET_SUCCESS, payload: data });
   } catch (ticket_error) {
     dispatch({
@@ -234,4 +237,11 @@ export const GetTicketAction = () => async (dispatch, getState) => {
       payload: ticket_error.response.data,
     });
   }
+};
+
+export const GoPayGate = (authRequestAxios, order_id) => {
+  const response = authRequestAxios.get(
+    `http://127.0.0.1:8000/api/v1/create_test_payment/${order_id}/`
+  );
+  return response;
 };

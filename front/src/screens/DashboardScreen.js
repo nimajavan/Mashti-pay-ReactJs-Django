@@ -24,6 +24,8 @@ import {
   GetSellOrdersAction,
   GetCartAction,
   RemoveCartAction,
+  GetTicketAction,
+  GoPayGate,
 } from "../actions/UserFormAction";
 import ExchnageTable from "../components/ExchnageTable";
 import HistoryTable from "../components/HistoryTable";
@@ -32,6 +34,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Cart from "../components/Cart";
 import Alert from "../components/Alert";
 import { USER_UPDATE_SUCCESS_FINISH } from "../constants/UserLoginConstants";
+import axiosInstance from "../utils/axiosInstance";
 
 function DashboardScreen() {
   window.onload = function () {
@@ -90,6 +93,8 @@ function DashboardScreen() {
   const profileUpdate = useSelector((state) => state.userProfileUpdate);
   const { updating, update_profile_status, update_failed } = profileUpdate;
   var success_update = profileUpdate.success_update;
+  const ticket = useSelector((state) => state.GetTicket);
+  const { ticket_loading, tickets, ticket_error } = ticket;
   const { buy_order_loading, buy_order_state, buy_order_error } = buy;
   const { get_cart_loading, cart, cart_error } = cartState;
   const { sell_orders_loading, sell_items, sell_itmes_error } =
@@ -175,6 +180,14 @@ function DashboardScreen() {
     dispatch(RemoveCartAction(id));
   };
 
+  const PayOrderHandler = (authRequestAxios, order_id) => {
+    GoPayGate(authRequestAxios, order_id)
+      .then((response) => {
+        window.location.assign(response.data.link);
+      })
+      .catch(console.log("error"));
+  };
+
   useEffect(() => {
     if (
       !userInfo ||
@@ -190,6 +203,7 @@ function DashboardScreen() {
         dispatch(GetOrdersAction());
         dispatch(GetSellOrdersAction());
         dispatch(GetDollarPriceAction());
+        dispatch(GetTicketAction());
       } else {
         setPhone(userInfo.phone);
         setName(profile_status.name);
@@ -517,6 +531,7 @@ function DashboardScreen() {
                               passChildData={setShowCartModal}
                               items={cartItem}
                               remove_cart_func={remove_cart_func}
+                              PayOrderHandler={PayOrderHandler}
                             />
                           )}
                         </Form>
@@ -606,7 +621,7 @@ function DashboardScreen() {
         <Card>
           <Card.Body>
             <Container>
-              <TicketTable />
+              <TicketTable tickets={tickets} />
             </Container>
           </Card.Body>
         </Card>

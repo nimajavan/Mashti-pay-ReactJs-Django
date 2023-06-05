@@ -19,12 +19,9 @@ const axiosInstance = (userInfo, dispatch) => {
 
     if (!isExpired) return req;
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/token/refresh/",
-        {
-          refresh: userInfo.refresh,
-        }
-      );
+      const response = await axios.post(`${BaseUrl}/token/refresh/`, {
+        refresh: userInfo.refresh,
+      });
       dispatch(updateAccessToken(response.data));
       req.headers.Authorization = `Bearer ${response.data.access}`;
       return req;

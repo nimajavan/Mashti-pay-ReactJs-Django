@@ -91,12 +91,17 @@ def get_dollar_price(request):
     return Response(DollarPriceSerializer(price).data, status=status.HTTP_200_OK)
 
 
-@api_view(http_method_names=['POST'])
-def create_payment_url(request):
-    try:
+@api_view(http_method_names=['GET'])
+def create_test_payment(request, id):
+    print(id)
+    link = {'link': 'https://www.downloadha.com'}
+    return Response(link)
 
-        data = request.data
-        order = BuyOrder.objects.get(id=data['order_id'])
+
+@api_view(http_method_names=['POST'])
+def create_payment_url(request, id):
+    try:
+        order = BuyOrder.objects.get(id=id)
         user = User.objects.get(id=request.user.id)
 
         headers = {
@@ -115,7 +120,7 @@ def create_payment_url(request):
         }
 
         record = PaymentHistory.objects.create(
-            order_id=data['order_id'], amount=int(order.total_price)
+            order_id=id, amount=int(order.total_price)
         )
         r = req.post(
             'https://api.idpay.ir/v1.1/payment/inquiry',

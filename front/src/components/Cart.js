@@ -1,9 +1,14 @@
 import React from "react";
 import { Container, Button, Modal, Row, Col, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import axiosInstance from "../utils/axiosInstance";
 function Cart(props) {
+  console.log(props.items);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo, error } = userLogin;
+  const dispatch = useDispatch();
+  const authRequestAxios = axiosInstance(userInfo, dispatch);
   const [show, setShow] = useState(true);
 
   const handleClose = () => setShow(false);
@@ -51,7 +56,17 @@ function Cart(props) {
                         <td>{it.quantity}</td>
                         <td>{it.price}</td>
                         <td>
-                          <Button className="btn btn-success">پرداخت</Button>
+                          <Button
+                            onClick={() =>
+                              props.PayOrderHandler(
+                                authRequestAxios,
+                                it.order_id
+                              )
+                            }
+                            className="btn btn-success"
+                          >
+                            پرداخت
+                          </Button>
                         </td>
                         <td>
                           <Button

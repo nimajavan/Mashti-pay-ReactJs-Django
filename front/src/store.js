@@ -18,6 +18,7 @@ import {
   GetOrdersReducer,
   GetSellOrdersReducer,
   GetCartReducer,
+  GetTicketReducer,
 } from "./reducers/UserFormReducer";
 
 const reducer_root = combineReducers({
@@ -33,6 +34,7 @@ const reducer_root = combineReducers({
   getOrder: GetOrdersReducer,
   getSellOrder: GetSellOrdersReducer,
   getCart: GetCartReducer,
+  GetTicket: GetTicketReducer,
 });
 
 const UserLoginFromLocalStorage = localStorage.getItem("userInfo")
