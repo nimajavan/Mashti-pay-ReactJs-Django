@@ -62,7 +62,7 @@ function TicketTable(props) {
   var data = Object.values(x || {});
   return (
     <section>
-      <DataTable title="تیکت ها" columns={columns} data={data} pagination />;
+      <DataTable title="تیکت ها" columns={columns} data={data} pagination />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>جزییات تیکت</Modal.Title>

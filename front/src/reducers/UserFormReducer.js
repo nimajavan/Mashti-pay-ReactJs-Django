@@ -20,6 +20,10 @@ import {
   TICKET_REQUEST,
   TICKET_SUCCESS,
   TICKET_FIALD,
+  TICKET_SEND_REQUEST,
+  TICKET_SEND_SUCCESS,
+  TICKET_SEND_FIALD,
+  TICKET_SEND_END,
 } from "../constants/UserFormConstants";
 
 export const GetDollarPriceReducer = (state = {}, action) => {
@@ -108,6 +112,25 @@ export const GetTicketReducer = (state = {}, action) => {
       return { ticket_loading: false, tickets: action.payload };
     case TICKET_FIALD:
       return { ticket_loading: false, ticket_error: action.paylaod };
+    default:
+      return state;
+  }
+};
+
+export const SendTicketReducer = (state = {}, action) => {
+  switch (action.type) {
+    case TICKET_SEND_REQUEST:
+      return { send_loading: true };
+    case TICKET_SEND_SUCCESS:
+      return { send_loading: false, send_code: action.payload };
+    case TICKET_SEND_FIALD:
+      return { send_loading: false, send_code_error: action.payload };
+    case TICKET_SEND_END:
+      return {
+        send_loading: false,
+        send_code_error: "",
+        send_code: "",
+      };
     default:
       return state;
   }

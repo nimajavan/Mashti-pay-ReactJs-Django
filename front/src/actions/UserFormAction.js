@@ -20,6 +20,10 @@ import {
   TICKET_REQUEST,
   TICKET_SUCCESS,
   TICKET_FIALD,
+  TICKET_SEND_REQUEST,
+  TICKET_SEND_SUCCESS,
+  TICKET_SEND_FIALD,
+  TICKET_SEND_END,
 } from "../constants/UserFormConstants";
 import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
@@ -229,7 +233,6 @@ export const GetTicketAction = () => async (dispatch, getState) => {
     const { data } = await authRequestAxios.get(
       "http://127.0.0.1:8000/api/v1/get_ticket/"
     );
-    console.log(data);
     dispatch({ type: TICKET_SUCCESS, payload: data });
   } catch (ticket_error) {
     dispatch({
@@ -244,4 +247,31 @@ export const GoPayGate = (authRequestAxios, order_id) => {
     `http://127.0.0.1:8000/api/v1/create_test_payment/${order_id}/`
   );
   return response;
+};
+
+export const SendTicketAction = (title, body) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: TICKET_SEND_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const authRequestAxios = axiosInstance(userInfo, dispatch);
+    const { data } = await authRequestAxios.post(
+      "http://127.0.0.1:8000/api/v1/ticket_form_view/",
+      { body: body, title: title }
+    );
+    console.log(data.status);
+    dispatch({ type: TICKET_SEND_SUCCESS, payload: data.status });
+    setTimeout(() => {
+      dispatch({ type: TICKET_SEND_END });
+    }, 5000);
+  } catch (send_code_error) {
+    dispatch({
+      type: TICKET_SEND_FIALD,
+      payload: send_code_error.response.data.status,
+    });
+    setTimeout(() => {
+      dispatch({ type: TICKET_SEND_END });
+    }, 5000);
+  }
 };

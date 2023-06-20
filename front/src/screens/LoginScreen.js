@@ -37,8 +37,9 @@ function LoginScreen() {
   }, [navigate, redirect, userInfo]);
   return (
     <Container fluid>
-      {error ? <Alert message={"خطا"} info={"login_error"} /> : null}
-      {userInfo ? (
+      {error ? (
+        <Alert message={"خطا"} info={"login_error"} />
+      ) : userInfo ? (
         <Alert message={"شما با موفقیت وارد شدید"} info={"login_success"} />
       ) : null}
       <Row className="d-flex justify-content-center align-items-center h-100">

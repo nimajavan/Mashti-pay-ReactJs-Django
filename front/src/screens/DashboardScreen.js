@@ -1,5 +1,13 @@
 import { React, useState, useEffect } from "react";
-import { Card, Button, Row, Col, Form, Image } from "react-bootstrap";
+import {
+  Card,
+  Button,
+  Row,
+  Col,
+  Form,
+  Image,
+  FloatingLabel,
+} from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -7,7 +15,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import avatar from "../svgs/avatar.png";
 import LineChart from "../components/LineChart";
 import TicketTable from "../components/TicketTable";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   FetchUserProfileAction,
   UploadSelfiAction,
@@ -26,6 +34,7 @@ import {
   RemoveCartAction,
   GetTicketAction,
   GoPayGate,
+  SendTicketAction,
 } from "../actions/UserFormAction";
 import ExchnageTable from "../components/ExchnageTable";
 import HistoryTable from "../components/HistoryTable";
@@ -94,6 +103,9 @@ function DashboardScreen() {
   const { updating, update_profile_status, update_failed } = profileUpdate;
   var success_update = profileUpdate.success_update;
   const ticket = useSelector((state) => state.GetTicket);
+  const ticketForm = useSelector((state) => state.SendTicket);
+
+  const { send_loading, send_code, send_code_error } = ticketForm;
   const { ticket_loading, tickets, ticket_error } = ticket;
   const { buy_order_loading, buy_order_state, buy_order_error } = buy;
   const { get_cart_loading, cart, cart_error } = cartState;
@@ -107,6 +119,10 @@ function DashboardScreen() {
 
   // cart
   const [cartItem, setCartItem] = useState([]);
+
+  // ticket
+  const [ticketTitle, setTicketTitle] = useState("");
+  const [ticketBody, setTicketBody] = useState("");
 
   // profile state
   const [name, setName] = useState("");
@@ -186,6 +202,11 @@ function DashboardScreen() {
         window.location.assign(response.data.link);
       })
       .catch(console.log("error"));
+  };
+
+  const sendTicketHandler = (e) => {
+    e.preventDefault();
+    dispatch(SendTicketAction(ticketTitle, ticketBody));
   };
 
   useEffect(() => {
@@ -621,7 +642,47 @@ function DashboardScreen() {
         <Card>
           <Card.Body>
             <Container>
-              <TicketTable tickets={tickets} />
+              <div>
+                <Form onSubmit={sendTicketHandler}>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>موضوع</Form.Label>
+                    <Form.Control
+                      onChange={(e) => setTicketTitle(e.target.value)}
+                      type="text"
+                      placeholder=""
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlTextarea1"
+                  >
+                    <Form.Label>متن تیکت</Form.Label>
+                    <Form.Control
+                      onChange={(e) => setTicketBody(e.target.value)}
+                      as="textarea"
+                      rows={3}
+                    />
+                  </Form.Group>
+                  <Button type="submit" className="btn btn-primary">
+                    ارسال
+                  </Button>
+                </Form>
+                {send_loading ? <Spinner /> : null}
+                {send_code == "ok" ? (
+                  <Alert message={"تیکت با موفقیت ثبت شد"} info={"success"} />
+                ) : send_code_error ? (
+                  <Alert
+                    message={"خطایی رخ داده است لطفا دوباره تلاش کنید"}
+                    info={"error"}
+                  />
+                ) : null}
+              </div>
+              <div>
+                <TicketTable tickets={tickets} />
+              </div>
             </Container>
           </Card.Body>
         </Card>
